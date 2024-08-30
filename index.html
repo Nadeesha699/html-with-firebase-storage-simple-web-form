@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPLE FIREBASE STORAGE PROJECT</title>
+    <link rel="stylesheet" href="../FireStoreSimpleProject/css/index.css" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="container-sub">
+        <input type="file" id="fileInput"/>
+        <button id="btn-add">add</button>
+      </div>
+      <img id="upload-img" alt="no-data" />
+    </div>
+
+    <script type="module">
+      document.getElementById('upload-img').src = "images/photo.png"
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAZMr7dmna6V3sg_T6H-2YHyTFVL1w_y4g",
+        authDomain: "simple-crud-5ac24.firebaseapp.com",
+        databaseURL: "https://simple-crud-5ac24-default-rtdb.firebaseio.com",
+        projectId: "simple-crud-5ac24",
+        storageBucket: "simple-crud-5ac24.appspot.com",
+        messagingSenderId: "434753734576",
+        appId: "1:434753734576:web:24a327681ada70d9a27875",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      import {
+        getStorage,
+        ref,
+        uploadBytes,
+        getDownloadURL,
+      } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
+
+      const storage = getStorage(app);
+
+      document.getElementById("btn-add").addEventListener("click", addImage);
+      async function addImage() {
+        const fileImput = document.getElementById("fileInput");
+        const file = fileImput.files[0];
+        const storageRef = ref(storage, `uploaded_file/${file.name}`);
+        await uploadBytes(storageRef, file);
+
+        document.getElementById("upload-img").src = await getDownloadURL(
+          storageRef
+        );
+      }
+    </script>
+  </body>
+</html>
